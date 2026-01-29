@@ -436,18 +436,40 @@
     return document.getElementById('liqa-score');
   }
 
-  async function readPrompt() {
+  async function readSystemPrompt() {
     try {
       // Prefer user-configured systemPrompt; fallback to bundled prompt file
       const cfg = await new Promise((resolve)=> chrome.storage.local.get(['liqa-ai-config-v1'], d=> resolve(d?.['liqa-ai-config-v1'] || {})))
       const user = (cfg && typeof cfg.systemPrompt === 'string' && cfg.systemPrompt.trim()) ? cfg.systemPrompt : ''
       if (user) return user
-      const res = await fetch(chrome.runtime.getURL('src/ai/prompt.txt'));
+      const res = await fetch(chrome.runtime.getURL('dist/src/ai/system-prompt.txt'));
       if (!res.ok) throw new Error('Prompt not found');
       return await res.text();
     } catch (_) {
+      // Load fallback prompt from file
+      try {
+        const res = await fetch(chrome.runtime.getURL('dist/src/ai/fallback-prompt.txt'));
+        if (res.ok) return await res.text();
+      } catch (_) {}
       return 'You are an expert recruiter. Score candidates 0-100 based on role fit and impact profile. Return JSON with keys: score (0-100), strengths (array), weaknesses (array).';
     }
+  }
+
+  async function readUserPromptTemplate() {
+    try {
+      const res = await fetch(chrome.runtime.getURL('dist/src/ai/user-prompt-template.txt'));
+      if (!res.ok) throw new Error('Template not found');
+      return await res.text();
+    } catch (_) {
+      return `Job Description:\n{{JOB_DESCRIPTION}}\n\nImpact Profile:\n{{IMPACT_PROFILE}}\n\nCandidate Profile:\n{{CANDIDATE_PROFILE}}\n\nRespond in strict JSON. If you return Markdown or text, still ensure a valid JSON block exists.`;
+    }
+  }
+
+  function buildUserPrompt(template, jobText, impactProfile, candidateProfile) {
+    return template
+      .replace('{{JOB_DESCRIPTION}}', jobText)
+      .replace('{{IMPACT_PROFILE}}', impactProfile)
+      .replace('{{CANDIDATE_PROFILE}}', candidateProfile);
   }
 
   async function callOpenAI(apiKey, model, systemPrompt, userContent) {
@@ -582,8 +604,9 @@
       window.postMessage({ type: 'LIQA_SCORE_OVERLAY_UPDATE', score: '…' }, '*');
       showProgressBar();
 
-      const sys = await readPrompt();
-      const user = `Job Description:\n${job.text}\n\nImpact Profile:\n${impact}\n\nCandidate Profile:\n${profile}\n\nRespond in strict JSON. If you return Markdown or text, still ensure a valid JSON block exists.`;
+      const sys = await readSystemPrompt();
+      const userTemplate = await readUserPromptTemplate();
+      const user = buildUserPrompt(userTemplate, job.text, impact, profile);
       try {
         const text = await callOpenAI(apiKey, (cfg.model || 'gpt-4o-mini'), sys, user);
         // Try to parse JSON from content; if not available, attempt to coerce

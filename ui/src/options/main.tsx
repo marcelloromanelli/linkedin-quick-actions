@@ -122,7 +122,7 @@ function OptionsApp() {
 
   async function loadDefaultPrompt() {
     try {
-      const url = chrome.runtime.getURL('src/ai/prompt.txt')
+      const url = chrome.runtime.getURL('dist/src/ai/system-prompt.txt')
       const res = await fetch(url)
       const text = await res.text()
       setCfg((prev:any)=>({ ...prev, systemPrompt: text }))

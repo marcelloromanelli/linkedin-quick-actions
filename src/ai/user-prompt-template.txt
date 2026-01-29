@@ -1,0 +1,10 @@
+Job Description:
+{{JOB_DESCRIPTION}}
+
+Impact Profile:
+{{IMPACT_PROFILE}}
+
+Candidate Profile:
+{{CANDIDATE_PROFILE}}
+
+Respond in strict JSON. If you return Markdown or text, still ensure a valid JSON block exists.

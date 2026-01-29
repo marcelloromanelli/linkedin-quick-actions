@@ -36,7 +36,7 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "src/ai/prompt.txt",
+        "dist/src/ai/*.txt",
         "dist/*",
         "dist/assets/*",
         "dist/src/overlay/index.html"

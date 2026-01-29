@@ -1,11 +1,22 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { viteStaticCopy } from 'vite-plugin-static-copy'
 import path from 'path'
 
 // Multi-page build for popup and options
 export default defineConfig({
   base: '',
-  plugins: [react()],
+  plugins: [
+    react(),
+    viteStaticCopy({
+      targets: [
+        {
+          src: '../src/ai/*.txt',
+          dest: 'src/ai'
+        }
+      ]
+    })
+  ],
   build: {
     outDir: '../dist',
     emptyOutDir: false,
