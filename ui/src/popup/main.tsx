@@ -2,7 +2,6 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import '../index.css'
 import { useEffect, useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { Label } from '@/components/ui/label'
@@ -10,7 +9,7 @@ import { Switch } from '@/components/ui/switch'
 import { Button } from '@/components/ui/button'
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
 import { Command, CommandInput, CommandEmpty, CommandList, CommandGroup, CommandItem } from '@/components/ui/command'
-import { Sparkles, Briefcase, Settings } from 'lucide-react'
+import { Sparkles, ChevronDown, Settings, Zap, Check } from 'lucide-react'
 import { getLocal, getSync, setLocal, setSync, JOBS_INDEX, LAST_JOB, SYNC_SETTINGS, SYNC_SELECTORS } from '@/lib/storage'
 import { Toaster } from '@/components/ui/sonner'
 import { toast } from 'sonner'
@@ -20,10 +19,10 @@ function PopupApp() {
   const [hotkeys, setHotkeys] = useState(true)
   const [jobs, setJobs] = useState<{id:string,name:string}[]>([])
   const [jobIdx, setJobIdx] = useState(0)
+  const [jobOpen, setJobOpen] = useState(false)
 
   useEffect(() => {
-    // Force dark theme
-    try { document.documentElement.classList.add('dark') } catch {}
+    document.documentElement.classList.add('dark')
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs: any[]) => {
       const tab = tabs?.[0]
       setActive(!!(tab?.url?.startsWith('https://www.linkedin.com/talent/hire/')))
@@ -58,7 +57,7 @@ function PopupApp() {
 
   const scoreNow = async () => {
     await setLocal(LAST_JOB, jobIdx)
-    toast.success('Evaluating current candidate…')
+    toast.success('Evaluating candidate...')
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs: any[]) => {
       const tab = tabs?.[0]
       if (!tab?.id) return
@@ -70,59 +69,100 @@ function PopupApp() {
         })
       })
     })
-    // Toaster appears; we can add notifications later
   }
 
   return (
-    <div className="p-3 w-[420px] text-sm">
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-base flex items-center justify-between">
-            <span>LinkedIn Quick Actions</span>
-            <span className="flex gap-2">
-              <Badge variant="default">{active ? 'Active' : 'Inactive'}</Badge>
-              <Badge variant="secondary">{hotkeys ? 'Hotkeys On' : 'Hotkeys Off'}</Badge>
-            </span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          <div className="flex items-center justify-between gap-2">
-            <Label htmlFor="hotkeys">Enable D / A / S / W</Label>
-            <div className="flex items-center gap-2">
-              <Switch id="hotkeys" checked={hotkeys} onCheckedChange={toggleHotkeys} />
-              <span className="text-muted-foreground" id="status">{hotkeys ? 'On' : 'Off'}</span>
+    <div className="w-[380px] bg-background text-foreground">
+      {/* Header */}
+      <header className="flex items-center justify-between px-4 py-3 border-b border-border">
+        <div className="flex items-center gap-2">
+          <div className="flex items-center justify-center w-6 h-6 rounded bg-primary/15">
+            <Zap className="w-3.5 h-3.5 text-primary" />
+          </div>
+          <span className="text-xs font-semibold tracking-tight">Quick Actions</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <Badge variant={active ? "success" : "secondary"}>
+            {active ? 'Active' : 'Inactive'}
+          </Badge>
+          <Badge variant={hotkeys ? "default" : "muted"}>
+            {hotkeys ? 'Keys On' : 'Keys Off'}
+          </Badge>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <div className="p-4 space-y-4">
+        {/* Hotkeys Toggle */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Label htmlFor="hotkeys" className="text-xs font-medium">Keyboard shortcuts</Label>
+            <div className="flex items-center gap-1">
+              <kbd>D</kbd>
+              <kbd>A</kbd>
+              <kbd>S</kbd>
+              <kbd>W</kbd>
             </div>
           </div>
-          <Separator />
-          <div>
-            <div className="mb-2 font-medium">Test Selectors</div>
-            <div className="grid grid-cols-2 gap-2">
-              <Button variant="outline" onClick={() => test('next')}>Test Next</Button>
-              <Button variant="outline" onClick={() => test('prev')}>Test Previous</Button>
-              <Button variant="outline" onClick={() => test('save')}>Test Save</Button>
-              <Button variant="outline" onClick={() => test('hide')}>Test Hide</Button>
-              <Button onClick={() => ['next','prev','save','hide'].forEach((k,i)=>setTimeout(()=>test(k as any), i*100))}>Test All</Button>
-            </div>
+          <Switch id="hotkeys" checked={hotkeys} onCheckedChange={toggleHotkeys} />
+        </div>
+
+        <Separator />
+
+        {/* Test Selectors - Compact Grid */}
+        <div className="space-y-2">
+          <div className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
+            Test Selectors
           </div>
-          <Separator />
-          <div className="flex items-center gap-2">
-            <Popover>
+          <div className="grid grid-cols-4 gap-1.5">
+            <Button variant="outline" size="sm" onClick={() => test('next')}>
+              Next
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => test('prev')}>
+              Prev
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => test('save')}>
+              Save
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => test('hide')}>
+              Hide
+            </Button>
+          </div>
+        </div>
+
+        <Separator />
+
+        {/* AI Evaluation */}
+        <div className="space-y-2">
+          <div className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
+            AI Candidate Evaluation
+          </div>
+          <div className="flex gap-2">
+            <Popover open={jobOpen} onOpenChange={setJobOpen}>
               <PopoverTrigger asChild>
-                <Button variant="outline" className="w-full justify-between">
-                  <span className="flex items-center gap-2">
-                    <Briefcase className="h-4 w-4" />
-                    {jobs[jobIdx]?.name || 'Target Role'}
+                <Button variant="outline" className="flex-1 justify-between font-normal">
+                  <span className="truncate">
+                    {jobs[jobIdx]?.name || 'Select role...'}
                   </span>
+                  <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="p-0 w-[var(--radix-popover-trigger-width)]">
+              <PopoverContent className="p-0 w-[var(--radix-popover-trigger-width)]" align="start">
                 <Command>
-                  <CommandInput placeholder="Search jobs..." />
-                  <CommandEmpty>No jobs found.</CommandEmpty>
-                  <CommandList>
+                  <CommandInput placeholder="Search roles..." className="h-8 text-xs" />
+                  <CommandEmpty className="py-3 text-xs text-center text-muted-foreground">
+                    No roles found
+                  </CommandEmpty>
+                  <CommandList className="max-h-[180px] scrollbar-thin">
                     <CommandGroup>
                       {jobs.map((j, i) => (
-                        <CommandItem key={j.id} value={j.name} onSelect={() => setJobIdx(i)}>
+                        <CommandItem
+                          key={j.id}
+                          value={j.name}
+                          onSelect={() => { setJobIdx(i); setJobOpen(false) }}
+                          className="text-xs"
+                        >
+                          <Check className={`w-3.5 h-3.5 mr-2 ${i === jobIdx ? 'opacity-100' : 'opacity-0'}`} />
                           {j.name}
                         </CommandItem>
                       ))}
@@ -131,23 +171,33 @@ function PopupApp() {
                 </Command>
               </PopoverContent>
             </Popover>
-            <Button onClick={scoreNow} disabled={!jobs.length}>
-              <Sparkles className="mr-2 h-4 w-4" />
-              Evaluate Fit
+            <Button onClick={scoreNow} disabled={!jobs.length} className="gap-1.5">
+              <Sparkles className="w-3.5 h-3.5" />
+              Evaluate
             </Button>
           </div>
-          <div className="text-muted-foreground">Press Cmd/Ctrl+Shift+F to evaluate.</div>
-          <Separator />
-          <div className="flex justify-between">
-            <Button variant="outline" onClick={() => chrome.runtime.openOptionsPage?.()}>
-              <Settings className="mr-2 h-4 w-4" />
-              Options
-            </Button>
-            <div className="text-[11px] text-muted-foreground">v0.1.0</div>
+          <div className="text-[10px] text-muted-foreground">
+            Shortcut: <kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>F</kbd>
           </div>
-        </CardContent>
-      </Card>
-      <Toaster richColors closeButton position="bottom-center" />
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="flex items-center justify-between px-4 py-2.5 border-t border-border bg-card/50">
+        <Button variant="ghost" size="sm" onClick={() => chrome.runtime.openOptionsPage?.()}>
+          <Settings className="w-3.5 h-3.5 mr-1.5" />
+          Settings
+        </Button>
+        <span className="text-[10px] font-mono text-muted-foreground">v0.1.0</span>
+      </footer>
+
+      <Toaster
+        position="bottom-center"
+        toastOptions={{
+          className: 'text-xs',
+          duration: 2000,
+        }}
+      />
     </div>
   )
 }
