@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LinkedIn Quick Actions</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #fff;
+        --fg: #111;
+        --muted: #666;
+        --border: #d0d7de;
+        --brand: #0a66c2;
+        --ok: #1a7f37;
+        --warn: #b00020;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0f1115;
+          --fg: #e6edf3;
+          --muted: #9aa4ad;
+          --border: #30363d;
+        }
+      }
+      body {
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+      }
+      .wrap { padding: 14px; width: 320px; }
+      header { display:flex; align-items:center; justify-content:space-between; }
+      .title { display:flex; align-items:center; gap:8px; font-weight:600; font-size:14px; }
+      .chips { display:flex; gap:6px; }
+      .chip { font-size:11px; padding:2px 6px; border-radius:999px; border:1px solid var(--border); color:var(--muted); }
+      .chip.ok { color:#fff; background: var(--brand); border-color: var(--brand); }
+      .chip.off { color: var(--muted); background: transparent; }
+      .section { margin-top: 12px; border:1px solid var(--border); border-radius:8px; padding:10px 12px; }
+      .section h2 { margin:0 0 8px; font-size:12px; color: var(--muted); font-weight:600; text-transform: uppercase; letter-spacing:.02em; }
+      .row { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+      .switch { display:flex; align-items:center; gap:8px; }
+      .switch input { width: 38px; height: 20px; }
+      .hint { font-size:12px; color: var(--muted); margin-top:6px; }
+      .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background: transparent; border:1px solid var(--border); border-radius:6px; padding:1px 6px; font-size:12px; }
+      .grid { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:8px; }
+      button { padding:8px 10px; border-radius:8px; border:1px solid var(--border); background: transparent; color: var(--fg); cursor: pointer; }
+      button.primary { background: var(--brand); color:#fff; border-color: var(--brand); }
+      button:disabled { opacity: .5; cursor: not-allowed; }
+      .footer { margin-top: 10px; display:flex; align-items:center; justify-content:space-between; }
+      .link { color: var(--brand); background:none; border:none; padding:0; cursor:pointer; font-size:12px; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="title">
+          <img src="https://static.licdn.com/aero-v1/sc/h/cukxdu7s8ldmqz13xdao5xe75" width="16" height="16" alt="LinkedIn" />
+          LinkedIn Quick Actions
+        </div>
+        <div class="chips">
+          <span id="activeChip" class="chip off" title="Whether this page is supported">Inactive</span>
+          <span id="hotkeysChip" class="chip off" title="Hotkeys status">Hotkeys Off</span>
+        </div>
+      </header>
+
+      <section class="section">
+        <h2>Hotkeys</h2>
+        <div class="row">
+          <div class="switch">
+            <label for="hotkeysEnabled" style="font-weight:600">Enable D / A / S / W</label>
+          </div>
+          <label class="row"><input type="checkbox" id="hotkeysEnabled" /><span id="status">Off</span></label>
+        </div>
+        <div class="hint">Shortcuts: <span class="kbd">A</span> prev, <span class="kbd">D</span> next, <span class="kbd">S</span> save, <span class="kbd">W</span> hide</div>
+      </section>
+
+      <section class="section">
+        <h2>Test Selectors</h2>
+        <div class="grid">
+          <button id="testNext" title="Highlight Next button">Test Next</button>
+          <button id="testPrev" title="Highlight Previous button">Test Previous</button>
+          <button id="testSave" title="Highlight Save button">Test Save</button>
+          <button id="testHide" title="Highlight Hide button">Test Hide</button>
+          <button id="testAll" class="primary" title="Run all tests">Test All</button>
+        </div>
+        <div id="testHint" class="hint">Open a Recruiter candidate tab to run tests.</div>
+      </section>
+
+      <section class="section">
+        <h2>AI Scoring</h2>
+        <div class="row" style="gap:8px">
+          <select id="jobSelect" style="flex:1"></select>
+          <button id="scoreNow" class="primary">Score Now</button>
+        </div>
+        <div class="hint">Select a saved job description, then score the current candidate (or press Command/Ctrl+Shift+F).</div>
+      </section>
+
+      <div class="footer">
+        <button class="link" id="openOptions" title="Edit selectors, legend, and AI settings">Open Options…</button>
+      </div>
+    </div>
+    <script src="src/popup/popup.js"></script>
+  </body>
+  </html>

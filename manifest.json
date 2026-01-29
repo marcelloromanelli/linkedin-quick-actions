@@ -1,0 +1,47 @@
+{
+  "manifest_version": 3,
+  "name": "LinkedIn Quick Actions",
+  "description": "Keyboard shortcuts to navigate, save, and hide candidates in LinkedIn Recruiter.",
+  "version": "0.1.0",
+  "permissions": ["storage", "tabs", "scripting"],
+  "host_permissions": [
+    "https://www.linkedin.com/talent/hire/*",
+    "https://api.openai.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.linkedin.com/talent/hire/*"
+      ],
+      "js": ["src/content/content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "service_worker": "src/background.js"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "dist/*",
+        "dist/assets/*",
+        "dist/src/overlay/index.html"
+      ],
+      "matches": ["https://www.linkedin.com/*"]
+    }
+  ],
+  "commands": {
+    "score_profile": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+F",
+        "mac": "Command+Shift+F"
+      },
+      "description": "Score current candidate against selected job"
+    }
+  },
+  "options_page": "dist/src/options/index.html",
+  "action": {
+    "default_title": "LinkedIn Quick Actions",
+    "default_popup": "dist/src/popup/index.html"
+  }
+}

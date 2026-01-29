@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LinkedIn Quick Actions – Options</title>
+    <style>
+      :root { color-scheme: light dark; }
+      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 24px; }
+      h1 { font-size: 1.25rem; margin: 0 0 16px; }
+      .row { display: grid; grid-template-columns: 140px 1fr; gap: 12px; align-items: center; margin: 10px 0; }
+      input[type="text"] { width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; }
+      .hint { color: #666; font-size: 12px; margin-top: 2px; }
+      .actions { margin-top: 16px; display: flex; gap: 8px; }
+      button { padding: 8px 12px; border-radius: 6px; border: 1px solid #888; cursor: pointer; }
+      .save { background: #0a66c2; color: white; border-color: #0a66c2; }
+      .toast { position: fixed; right: 16px; bottom: 16px; background: #222; color:#fff; padding: 8px 12px; border-radius: 8px; opacity: 0; transition: opacity .2s; }
+    </style>
+  </head>
+  <body>
+    <h1>LinkedIn Quick Actions – Options</h1>
+    <div class="row">
+      <label for="next">Next (D)</label>
+      <div>
+        <input id="next" type="text" placeholder="CSS selector for Next" />
+        <div class="hint">Examples: .artdeco-pagination__button--next, button[aria-label='Next']</div>
+      </div>
+    </div>
+    <div class="row">
+      <label for="prev">Previous (A)</label>
+      <div>
+        <input id="prev" type="text" placeholder="CSS selector for Previous" />
+        <div class="hint">Examples: .artdeco-pagination__button--previous, button[aria-label='Previous']</div>
+      </div>
+    </div>
+    <div class="row">
+      <label for="save">Save (S)</label>
+      <div>
+        <input id="save" type="text" placeholder="CSS selector for Save" />
+        <div class="hint">Examples: [data-control-name*='save']</div>
+      </div>
+    </div>
+    <div class="row">
+      <label for="hide">Hide (W)</label>
+      <div>
+        <input id="hide" type="text" placeholder="CSS selector for Hide" />
+        <div class="hint">Examples: .entity-result__dismiss</div>
+      </div>
+    </div>
+    <div class="actions">
+      <button id="reset">Reset to defaults</button>
+      <button class="save" id="saveBtn">Save</button>
+    </div>
+    <hr style="margin:20px 0; border:none; border-top:1px solid #ddd" />
+    <div class="row">
+      <label for="hotkeysEnabled">Hotkeys</label>
+      <div>
+        <label style="display:flex; align-items:center; gap:8px">
+          <input type="checkbox" id="hotkeysEnabled" /> Enable D/A/S/W shortcuts
+        </label>
+        <div class="hint">Uncheck to disable the keyboard shortcuts globally.</div>
+      </div>
+    </div>
+    <div class="row">
+      <label for="legendEnabled">On-page legend</label>
+      <div>
+        <label style="display:flex; align-items:center; gap:8px">
+          <input type="checkbox" id="legendEnabled" /> Show D/A/S/W hint inside slide-in
+        </label>
+        <div class="hint">Displays a tiny, non-intrusive legend while slide-in is open.</div>
+      </div>
+    </div>
+
+    <hr style="margin:20px 0; border:none; border-top:1px solid #ddd" />
+    <h2 style="font-size:14px; margin:0 0 8px">Test Selectors</h2>
+    <div class="row">
+      <label>Highlight</label>
+      <div style="display:flex; gap:8px; flex-wrap:wrap">
+        <button id="testNext">Test Next</button>
+        <button id="testPrev">Test Previous</button>
+        <button id="testSave">Test Save</button>
+        <button id="testHide">Test Hide</button>
+      </div>
+    </div>
+    <div class="toast" id="toast">Saved</div>
+    <hr style="margin:24px 0; border:none; border-top:1px solid #ddd" />
+    <h2 style="margin:0 0 8px; font-size:16px">AI Scoring Settings</h2>
+    <div class="row">
+      <label for="apiKey">OpenAI API Key</label>
+      <input id="apiKey" type="password" placeholder="sk-..." />
+    </div>
+    <div class="row">
+      <label for="modelSelect">Model</label>
+      <div>
+        <div style="display:flex; gap:8px; align-items:center">
+          <select id="modelSelect"></select>
+          <button id="refreshModels">Refresh</button>
+        </div>
+        <div class="hint">Pick a chat-capable model (default: gpt-5-medium). Enter a custom one if needed:</div>
+        <input id="modelCustom" type="text" placeholder="Custom model id (optional)" style="margin-top:6px; width:100%" />
+      </div>
+    </div>
+    <div class="row">
+      <label for="impactProfile">Impact Profile</label>
+      <div>
+        <textarea id="impactProfile" rows="6" style="width:100%" placeholder="Describe what strong impact looks like for engineers at GetYourGuide..."></textarea>
+        <div class="hint">Used to evaluate candidates for cultural/impact fit.</div>
+      </div>
+    </div>
+    <div class="row">
+      <label for="systemPrompt">Recruiter Agent Prompt</label>
+      <div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px">
+          <div class="hint" style="margin:0">Guides the AI recruiter; saved locally.</div>
+          <button id="loadDefaultPrompt" class="link" type="button">Load default</button>
+        </div>
+        <textarea id="systemPrompt" rows="10" style="width:100%" placeholder="System prompt to guide the recruiter agent..."></textarea>
+      </div>
+    </div>
+    <div class="row">
+      <label for="autoScan">Auto-scan</label>
+      <div>
+        <label style="display:flex; align-items:center; gap:8px">
+          <input type="checkbox" id="autoScan" /> Automatically score profiles when opened
+        </label>
+        <div class="hint">Runs AI scoring when the slide-in opens. Uses the last selected job.</div>
+      </div>
+    </div>
+    <div class="row">
+      <label>Job Descriptions</label>
+      <div style="width:100%">
+        <table id="jobsTable" style="width:100%; border-collapse: collapse; font-size: 13px;">
+          <thead>
+            <tr>
+              <th style="text-align:left; border-bottom:1px solid #ddd; padding:6px">Name</th>
+              <th style="text-align:left; border-bottom:1px solid #ddd; padding:6px">Preview</th>
+              <th style="text-align:right; border-bottom:1px solid #ddd; padding:6px">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="jobs"></tbody>
+        </table>
+        <div style="margin-top:8px; display:grid; grid-template-columns: 1fr auto; gap:8px; align-items:start">
+          <input id="jobName" type="text" placeholder="e.g., Android Engineer" />
+          <button id="addJob">Save</button>
+          <textarea id="jobText" rows="6" style="grid-column: 1 / -1; width:100%;" placeholder="Paste the job description here..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <button id="saveAI" class="save">Save AI Settings</button>
+    </div>
+    <script src="src/options/options.js"></script>
+  </body>
+  </html>
