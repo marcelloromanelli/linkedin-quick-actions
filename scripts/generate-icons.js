@@ -1,8 +1,8 @@
 /**
  * Generate extension icons at required sizes
  *
- * Design: Bold double chevron on LinkedIn blue - suggests speed & navigation
- * LinkedIn brand color: #0A66C2
+ * Design: Bold double chevron - cyan on dark slate
+ * Matches extension's design system (precision & density)
  */
 
 const { createCanvas } = require('canvas');
@@ -12,9 +12,9 @@ const path = require('path');
 const SIZES = [16, 32, 48, 128];
 const OUTPUT_DIR = path.join(__dirname, '..', 'icons');
 
-// LinkedIn brand colors
-const BG_COLOR = '#0A66C2';      // LinkedIn Blue
-const ICON_COLOR = '#FFFFFF';    // White
+// Extension brand colors
+const BG_COLOR = '#0f172a';      // Slate 900 (dark)
+const ICON_COLOR = '#22d3ee';    // Cyan 400 (aqua accent)
 
 function generateIcon(size) {
   const canvas = createCanvas(size, size);
@@ -69,4 +69,4 @@ for (const size of SIZES) {
   console.log(`Generated ${filename} (${buffer.length} bytes)`);
 }
 
-console.log('\nAll icons generated with LinkedIn blue (#0A66C2)!');
+console.log('\nAll icons generated with cyan on dark slate!');
