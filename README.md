@@ -31,7 +31,7 @@ A Chrome (MV3) extension that speeds up sourcing and profile review in LinkedIn 
 ## Configure AI
 - Open Options → AI Settings
   - Paste your OpenAI API key (stored in `chrome.storage.local`, not synced)
-  - Pick a model (default: `gpt-5-medium`), or click Refresh to fetch your available models
+  - Pick a model (default: `gpt-4o-mini`), or click Refresh to fetch your available models
   - Toggle Auto‑scan to score automatically when a candidate slide‑in opens
   - Provide your Impact Profile text
   - Add Job Descriptions (name + text); select the relevant job in the Popup
@@ -67,7 +67,8 @@ A Chrome (MV3) extension that speeds up sourcing and profile review in LinkedIn 
 The content script injects the built overlay CSS/JS from `dist/assets`. If you rebuild and asset filenames change (hashed), the extension code references may need to be updated. Look for the CSS and JS references in `ensureScoreOverlay()` inside `src/content/content.js` and update the filenames to match the latest build output shown by `npm run build`.
 
 ## Permissions
-- `storage`, `tabs`, `scripting`
+- `storage` (required) – save settings and job descriptions
+- `tabs` (optional) – only requested when testing selectors from Options
 - Host permissions: `https://www.linkedin.com/talent/hire/*`, `https://api.openai.com/*`
 
 ## Privacy

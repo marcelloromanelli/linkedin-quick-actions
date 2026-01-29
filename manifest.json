@@ -1,9 +1,21 @@
 {
   "manifest_version": 3,
   "name": "LinkedIn Quick Actions",
-  "description": "Keyboard shortcuts to navigate, save, and hide candidates in LinkedIn Recruiter.",
+  "short_name": "LI Quick Actions",
   "version": "0.1.0",
-  "permissions": ["storage", "tabs", "scripting"],
+  "description": "Keyboard shortcuts and AI-powered candidate scoring for LinkedIn Recruiter. Navigate candidates with D/A/S/W keys, evaluate fit with GPT.",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "permissions": [
+    "storage"
+  ],
+  "optional_permissions": [
+    "tabs"
+  ],
   "host_permissions": [
     "https://www.linkedin.com/talent/hire/*",
     "https://api.openai.com/*"
@@ -18,11 +30,13 @@
     }
   ],
   "background": {
-    "service_worker": "src/background.js"
+    "service_worker": "src/background.js",
+    "type": "module"
   },
   "web_accessible_resources": [
     {
       "resources": [
+        "src/ai/prompt.txt",
         "dist/*",
         "dist/assets/*",
         "dist/src/overlay/index.html"
@@ -42,6 +56,14 @@
   "options_page": "dist/src/options/index.html",
   "action": {
     "default_title": "LinkedIn Quick Actions",
-    "default_popup": "dist/src/popup/index.html"
+    "default_popup": "dist/src/popup/index.html",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png"
+    }
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
   }
 }

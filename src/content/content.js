@@ -386,11 +386,11 @@
       barInner.style.background = n>=70 ? '#16a34a' : n>=40 ? '#f59e0b' : '#ef4444';
     }
     if (Array.isArray(e.data.strengths)) {
-      strengths.innerHTML = '';
+      while (strengths.firstChild) strengths.removeChild(strengths.firstChild);
       e.data.strengths.forEach((t)=>{ const li=document.createElement('li'); li.textContent=t; strengths.appendChild(li); });
     }
     if (Array.isArray(e.data.weaknesses)) {
-      weaknesses.innerHTML='';
+      while (weaknesses.firstChild) weaknesses.removeChild(weaknesses.firstChild);
       e.data.weaknesses.forEach((t)=>{ const li=document.createElement('li'); li.textContent=t; weaknesses.appendChild(li); });
     }
   });
@@ -451,18 +451,15 @@
   }
 
   async function callOpenAI(apiKey, model, systemPrompt, userContent) {
-    const chosenModel = model || 'gpt-5-medium';
-    const isGpt5 = /^gpt-5/i.test(chosenModel);
+    const chosenModel = model || 'gpt-4o-mini';
     const payload = {
       model: chosenModel,
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userContent }
-      ]
+      ],
+      temperature: 0.2
     };
-    if (!isGpt5) {
-      payload.temperature = 0.2;
-    }
     const res = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -588,7 +585,7 @@
       const sys = await readPrompt();
       const user = `Job Description:\n${job.text}\n\nImpact Profile:\n${impact}\n\nCandidate Profile:\n${profile}\n\nRespond in strict JSON. If you return Markdown or text, still ensure a valid JSON block exists.`;
       try {
-        const text = await callOpenAI(apiKey, (cfg.model || 'gpt-5-medium'), sys, user);
+        const text = await callOpenAI(apiKey, (cfg.model || 'gpt-4o-mini'), sys, user);
         // Try to parse JSON from content; if not available, attempt to coerce
         const match = text && text.match(/\{[\s\S]*\}/);
         if (!match) throw new Error('No JSON found');

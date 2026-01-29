@@ -30,7 +30,7 @@ function load() {
 
     // AI (from local storage)
     chrome.storage.local.get([AI_CFG_KEY, JOBS_INDEX_KEY], (ldata) => {
-  const cfg = ldata?.[AI_CFG_KEY] || { apiKey: '', impactProfile: '', autoScan: false, model: 'gpt-5-medium', systemPrompt: '' };
+  const cfg = ldata?.[AI_CFG_KEY] || { apiKey: '', impactProfile: '', autoScan: false, model: 'gpt-4o-mini', systemPrompt: '' };
       $id('apiKey').value = cfg.apiKey || '';
       $id('impactProfile').value = cfg.impactProfile || '';
       $id('autoScan').checked = !!cfg.autoScan;
@@ -213,9 +213,9 @@ function saveAI() {
   const impactProfile = $id('impactProfile').value.trim();
   const systemPrompt = ($id('systemPrompt')?.value || '').trim();
   const autoScan = $id('autoScan').checked;
-  const model = ($id('modelCustom').value.trim()) || ($id('modelSelect').value || 'gpt-5-medium');
+  const model = ($id('modelCustom').value.trim()) || ($id('modelSelect').value || 'gpt-4o-mini');
   chrome.storage.local.get([AI_CFG_KEY], (data) => {
-  const cfg = data?.[AI_CFG_KEY] || { apiKey: '', impactProfile: '', autoScan: false, model: 'gpt-5-medium', systemPrompt: '' };
+  const cfg = data?.[AI_CFG_KEY] || { apiKey: '', impactProfile: '', autoScan: false, model: 'gpt-4o-mini', systemPrompt: '' };
     cfg.apiKey = apiKey; cfg.impactProfile = impactProfile; cfg.systemPrompt = systemPrompt; cfg.autoScan = autoScan; cfg.model = model;
     chrome.storage.local.set({ [AI_CFG_KEY]: cfg }, () => showToast('AI settings saved'));
   });
@@ -225,14 +225,14 @@ function initModelSelect(cfg) {
   const select = $id('modelSelect');
   const custom = $id('modelCustom');
   select.innerHTML = '';
-  const defaults = ['gpt-5-mini', 'gpt-5-medium', 'gpt-5-large'];
+  const defaults = ['gpt-4o-mini', 'gpt-4o', 'gpt-4-turbo'];
   defaults.forEach((m) => {
     const o = document.createElement('option'); o.value = m; o.textContent = m; select.appendChild(o);
   });
   if (cfg?.model && !defaults.includes(cfg.model)) {
     const o = document.createElement('option'); o.value = cfg.model; o.textContent = cfg.model; select.appendChild(o);
   }
-  select.value = cfg.model || 'gpt-5-medium';
+  select.value = cfg.model || 'gpt-4o-mini';
   custom.value = '';
   $id('refreshModels').onclick = () => refreshModels();
 }
