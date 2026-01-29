@@ -1,7 +1,7 @@
 /**
  * Generate extension icons at required sizes
  *
- * Design: White "LQ" text on LinkedIn blue rounded square
+ * Design: Bold double chevron on LinkedIn blue - suggests speed & navigation
  * LinkedIn brand color: #0A66C2
  */
 
@@ -21,22 +21,35 @@ function generateIcon(size) {
   const ctx = canvas.getContext('2d');
 
   // Background - rounded square
-  const radius = size * 0.18;
+  const radius = size * 0.22;
   ctx.fillStyle = BG_COLOR;
   ctx.beginPath();
   ctx.roundRect(0, 0, size, size, radius);
   ctx.fill();
 
-  // "LQ" text - clean and legible at all sizes
-  ctx.fillStyle = ICON_COLOR;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
+  // Double chevron >> suggesting speed/quick navigation
+  const cx = size / 2;
+  const cy = size / 2;
+  const s = size / 128;
 
-  // Bold font, sized to fill the icon
-  const fontSize = size * 0.52;
-  ctx.font = `bold ${fontSize}px -apple-system, "Segoe UI", sans-serif`;
+  ctx.strokeStyle = ICON_COLOR;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.lineWidth = size * 0.12; // Thick bold lines
 
-  ctx.fillText('LQ', size / 2, size / 2 + size * 0.04);
+  // First chevron (left)
+  ctx.beginPath();
+  ctx.moveTo(cx - 28 * s, cy - 32 * s);
+  ctx.lineTo(cx + 4 * s, cy);
+  ctx.lineTo(cx - 28 * s, cy + 32 * s);
+  ctx.stroke();
+
+  // Second chevron (right)
+  ctx.beginPath();
+  ctx.moveTo(cx + 4 * s, cy - 32 * s);
+  ctx.lineTo(cx + 36 * s, cy);
+  ctx.lineTo(cx + 4 * s, cy + 32 * s);
+  ctx.stroke();
 
   return canvas;
 }
