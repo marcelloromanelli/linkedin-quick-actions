@@ -1,7 +1,7 @@
 /**
  * Generate extension icons at required sizes
  *
- * Design: White lightning bolt on LinkedIn blue rounded square
+ * Design: White "LQ" text on LinkedIn blue rounded square
  * LinkedIn brand color: #0A66C2
  */
 
@@ -27,27 +27,16 @@ function generateIcon(size) {
   ctx.roundRect(0, 0, size, size, radius);
   ctx.fill();
 
-  // Lightning bolt - classic ⚡ shape
+  // "LQ" text - clean and legible at all sizes
   ctx.fillStyle = ICON_COLOR;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
 
-  const cx = size / 2;
-  const cy = size / 2;
-  const s = size / 128; // Scale factor
+  // Bold font, sized to fill the icon
+  const fontSize = size * 0.52;
+  ctx.font = `bold ${fontSize}px -apple-system, "Segoe UI", sans-serif`;
 
-  ctx.beginPath();
-
-  // Simple bold lightning bolt
-  // Upper section points down-right, lower section points to bottom tip
-  ctx.moveTo(cx - 24 * s, cy - 48 * s);  // 1. Top left corner
-  ctx.lineTo(cx + 20 * s, cy - 48 * s);  // 2. Top right corner
-  ctx.lineTo(cx - 4 * s, cy - 6 * s);    // 3. Middle right (angles down-left)
-  ctx.lineTo(cx + 24 * s, cy - 6 * s);   // 4. Step right
-  ctx.lineTo(cx - 20 * s, cy + 48 * s);  // 5. Bottom tip (angles down-left)
-  ctx.lineTo(cx + 4 * s, cy + 6 * s);    // 6. Middle left (angles back up-right)
-  ctx.lineTo(cx - 24 * s, cy + 6 * s);   // 7. Step left
-
-  ctx.closePath();
-  ctx.fill();
+  ctx.fillText('LQ', size / 2, size / 2 + size * 0.04);
 
   return canvas;
 }
