@@ -4,6 +4,9 @@ export const LOCAL_CFG = 'liqa-ai-config-v1'
 export const JOBS_INDEX = 'liqa-jobs-index-v1'
 export const JOB_PREFIX = 'liqa-job-'
 export const LAST_JOB = 'liqa-last-job-index'
+export const AGENTS_INDEX = 'liqa-agents-index-v1'
+export const AGENT_PREFIX = 'liqa-agent-'
+export const DEFAULT_AGENT = 'liqa-default-agent'
 
 export function getSync<T>(key: string, fallback: T): Promise<T> {
   return new Promise((resolve) => chrome.storage.sync.get([key], (d: any) => resolve((d?.[key] ?? fallback) as T)))
