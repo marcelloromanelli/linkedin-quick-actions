@@ -2,9 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import '../index.css'
 import { useEffect, useState } from 'react'
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
@@ -12,14 +10,74 @@ import { Badge } from '@/components/ui/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
-import { Separator } from '@/components/ui/separator'
 import { getSync, setSync, getLocal, setLocal, SYNC_SELECTORS, SYNC_SETTINGS, LOCAL_CFG, JOBS_INDEX, JOB_PREFIX } from '@/lib/storage'
 import { Toaster } from '@/components/ui/sonner'
 import { toast } from 'sonner'
 import {
-  Zap, Keyboard, Bot, Briefcase, ChevronDown, Check,
-  RefreshCw, Trash2, Pencil, Plus, Save, FileText
+  Zap, ChevronDown, Check,
+  RefreshCw, Trash2, Pencil, Plus, Save, FileText,
+  ChevronRight, ChevronLeft, Bookmark, EyeOff
 } from 'lucide-react'
+
+// Action card component for the hotkey selectors
+function ActionCard({
+  hotkey,
+  label,
+  description,
+  icon: Icon,
+  value,
+  onChange,
+  gradient
+}: {
+  hotkey: string
+  label: string
+  description: string
+  icon: React.ElementType
+  value: string
+  onChange: (v: string) => void
+  gradient: string
+}) {
+  return (
+    <div className="group relative overflow-hidden rounded-2xl bg-white/[0.03] border border-white/[0.06] p-5 transition-all duration-300 hover:bg-white/[0.05] hover:border-white/[0.1]">
+      {/* Gradient accent */}
+      <div className={`absolute top-0 right-0 w-32 h-32 ${gradient} blur-3xl opacity-20 group-hover:opacity-30 transition-opacity`} />
+
+      <div className="relative space-y-4">
+        {/* Header with key and icon */}
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-3">
+            <div className={`flex items-center justify-center w-10 h-10 rounded-xl ${gradient.replace('bg-', 'bg-').replace('/20', '/15')} backdrop-blur-sm`}>
+              <Icon className="w-5 h-5 text-white/80" />
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-white">{label}</h3>
+              <p className="text-xs text-white/40">{description}</p>
+            </div>
+          </div>
+
+          {/* Large keyboard shortcut */}
+          <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/[0.08] border border-white/[0.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
+            <span className="text-xl font-bold text-white/90">{hotkey}</span>
+          </div>
+        </div>
+
+        {/* Selector input */}
+        <div className="space-y-2">
+          <label className="text-[10px] font-medium text-white/30 uppercase tracking-wider">
+            CSS Selector
+          </label>
+          <input
+            type="text"
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder="Enter selector..."
+            className="w-full h-10 px-3 rounded-lg bg-white/[0.05] border border-white/[0.08] text-sm font-mono text-white/80 placeholder:text-white/20 outline-none transition-all focus:bg-white/[0.08] focus:border-white/[0.15]"
+          />
+        </div>
+      </div>
+    </div>
+  )
+}
 
 function OptionsApp() {
   const [selectors, setSelectors] = useState<any>({ next:'',prev:'',save:'',hide:'' })
@@ -127,145 +185,149 @@ function OptionsApp() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#0a0a0b]">
+      {/* Ambient background */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-cyan-500/10 rounded-full blur-[128px]" />
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[128px]" />
+      </div>
+
       {/* Header */}
-      <header className="sticky top-0 z-10 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-        <div className="max-w-4xl mx-auto px-6 py-4">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-8 h-8 rounded-md bg-primary/15">
-              <Zap className="w-4 h-4 text-primary" />
+      <header className="sticky top-0 z-20 border-b border-white/[0.06] bg-[#0a0a0b]/80 backdrop-blur-xl">
+        <div className="max-w-5xl mx-auto px-8 py-5">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center justify-center w-11 h-11 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-cyan-500/5 border border-cyan-500/20 shadow-[0_0_20px_rgba(34,211,238,0.15)]">
+              <Zap className="w-5 h-5 text-cyan-400" />
             </div>
             <div>
-              <h1 className="text-sm font-semibold tracking-tight">LinkedIn Quick Actions</h1>
-              <p className="text-[10px] text-muted-foreground">Settings & Configuration</p>
+              <h1 className="text-base font-semibold text-white tracking-tight">LinkedIn Quick Actions</h1>
+              <p className="text-xs text-white/40">Settings & Configuration</p>
             </div>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-4xl mx-auto px-6 py-6 space-y-6">
+      <main className="relative max-w-5xl mx-auto px-8 py-8 space-y-10">
 
-        {/* Hotkeys & Selectors */}
-        <Card>
-          <CardHeader className="pb-3">
-            <div className="flex items-center gap-2">
-              <Keyboard className="w-4 h-4 text-muted-foreground" />
-              <CardTitle>Hotkeys & Selectors</CardTitle>
+        {/* Hotkeys & Selectors - Redesigned */}
+        <section className="space-y-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-semibold text-white">Keyboard Actions</h2>
+              <p className="text-sm text-white/40 mt-1">Configure shortcuts and CSS selectors for LinkedIn Recruiter</p>
             </div>
-            <CardDescription>CSS selectors for LinkedIn Recruiter button targeting</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <Label className="text-[10px] uppercase tracking-wide text-muted-foreground">
-                  Next <kbd className="ml-1">D</kbd>
-                </Label>
-                <Input
-                  value={selectors.next}
-                  onChange={e=>setSelectors({...selectors,next:e.target.value})}
-                  placeholder="CSS selector"
-                  className="font-mono"
-                />
+            <Button onClick={saveSelectors} className="gap-2">
+              <Save className="w-4 h-4" />
+              Save Changes
+            </Button>
+          </div>
+
+          {/* Action Cards Grid */}
+          <div className="grid grid-cols-2 gap-4">
+            <ActionCard
+              hotkey="D"
+              label="Next Candidate"
+              description="Navigate to next profile"
+              icon={ChevronRight}
+              value={selectors.next}
+              onChange={(v) => setSelectors({...selectors, next: v})}
+              gradient="bg-cyan-500/20"
+            />
+            <ActionCard
+              hotkey="A"
+              label="Previous Candidate"
+              description="Navigate to previous profile"
+              icon={ChevronLeft}
+              value={selectors.prev}
+              onChange={(v) => setSelectors({...selectors, prev: v})}
+              gradient="bg-violet-500/20"
+            />
+            <ActionCard
+              hotkey="S"
+              label="Save to Pipeline"
+              description="Add candidate to pipeline"
+              icon={Bookmark}
+              value={selectors.save}
+              onChange={(v) => setSelectors({...selectors, save: v})}
+              gradient="bg-emerald-500/20"
+            />
+            <ActionCard
+              hotkey="W"
+              label="Hide Candidate"
+              description="Remove from current list"
+              icon={EyeOff}
+              value={selectors.hide}
+              onChange={(v) => setSelectors({...selectors, hide: v})}
+              gradient="bg-rose-500/20"
+            />
+          </div>
+
+          {/* Legend Toggle */}
+          <div className="flex items-center justify-between p-4 rounded-xl bg-white/[0.02] border border-white/[0.06]">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1.5">
+                <div className="w-6 h-6 rounded-md bg-white/[0.08] flex items-center justify-center text-[10px] font-bold text-white/60">D</div>
+                <div className="w-6 h-6 rounded-md bg-white/[0.08] flex items-center justify-center text-[10px] font-bold text-white/60">A</div>
+                <div className="w-6 h-6 rounded-md bg-white/[0.08] flex items-center justify-center text-[10px] font-bold text-white/60">S</div>
+                <div className="w-6 h-6 rounded-md bg-white/[0.08] flex items-center justify-center text-[10px] font-bold text-white/60">W</div>
               </div>
-              <div className="space-y-1.5">
-                <Label className="text-[10px] uppercase tracking-wide text-muted-foreground">
-                  Previous <kbd className="ml-1">A</kbd>
-                </Label>
-                <Input
-                  value={selectors.prev}
-                  onChange={e=>setSelectors({...selectors,prev:e.target.value})}
-                  placeholder="CSS selector"
-                  className="font-mono"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <Label className="text-[10px] uppercase tracking-wide text-muted-foreground">
-                  Save <kbd className="ml-1">S</kbd>
-                </Label>
-                <Input
-                  value={selectors.save}
-                  onChange={e=>setSelectors({...selectors,save:e.target.value})}
-                  placeholder="CSS selector"
-                  className="font-mono"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <Label className="text-[10px] uppercase tracking-wide text-muted-foreground">
-                  Hide <kbd className="ml-1">W</kbd>
-                </Label>
-                <Input
-                  value={selectors.hide}
-                  onChange={e=>setSelectors({...selectors,hide:e.target.value})}
-                  placeholder="CSS selector"
-                  className="font-mono"
-                />
-              </div>
+              <span className="text-sm text-white/60">Show keyboard legend on LinkedIn page</span>
             </div>
-            <Separator />
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Switch id="legend" checked={legend} onCheckedChange={setLegend} />
-                <Label htmlFor="legend" className="text-xs">Show keyboard legend on page</Label>
-              </div>
-              <Button onClick={saveSelectors} size="sm">
-                <Save className="w-3.5 h-3.5 mr-1.5" />
-                Save Selectors
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+            <Switch checked={legend} onCheckedChange={setLegend} />
+          </div>
+        </section>
+
+        <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
         {/* AI Configuration */}
-        <Card>
-          <CardHeader className="pb-3">
-            <div className="flex items-center gap-2">
-              <Bot className="w-4 h-4 text-muted-foreground" />
-              <CardTitle>AI Configuration</CardTitle>
-            </div>
-            <CardDescription>OpenAI integration for candidate scoring</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <section className="space-y-6">
+          <div>
+            <h2 className="text-lg font-semibold text-white">AI Configuration</h2>
+            <p className="text-sm text-white/40 mt-1">OpenAI integration for intelligent candidate scoring</p>
+          </div>
+
+          <div className="rounded-2xl bg-white/[0.02] border border-white/[0.06] p-6 space-y-6">
             {/* API Key & Model Selection */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <Label className="text-[10px] uppercase tracking-wide text-muted-foreground">
+            <div className="grid grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-xs font-medium text-white/40 uppercase tracking-wider">
                   OpenAI API Key
-                </Label>
+                </label>
                 <Input
                   type="password"
                   value={cfg.apiKey}
                   onChange={e=>setCfg({...cfg, apiKey:e.target.value})}
                   placeholder="sk-..."
-                  className="font-mono"
+                  className="font-mono bg-white/[0.03] border-white/[0.08]"
                 />
               </div>
-              <div className="space-y-1.5">
-                <Label className="text-[10px] uppercase tracking-wide text-muted-foreground">
+              <div className="space-y-2">
+                <label className="text-xs font-medium text-white/40 uppercase tracking-wider">
                   Model
-                </Label>
+                </label>
                 <div className="flex gap-2">
                   <Popover open={modelOpen} onOpenChange={setModelOpen}>
                     <PopoverTrigger asChild>
-                      <Button variant="outline" className="flex-1 justify-between font-mono text-xs">
+                      <Button variant="outline" className="flex-1 justify-between font-mono text-xs bg-white/[0.03] border-white/[0.08]">
                         {cfg.model || 'Select model'}
                         <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="p-0 w-[240px]" align="start">
                       <Command>
-                        <CommandInput placeholder="Search..." className="h-8 text-xs" />
-                        <CommandEmpty className="py-2 text-xs text-center text-muted-foreground">No models</CommandEmpty>
-                        <CommandList className="max-h-[200px] scrollbar-thin">
+                        <CommandInput placeholder="Search..." />
+                        <CommandEmpty>No models</CommandEmpty>
+                        <CommandList>
                           <CommandGroup>
                             {models.map((m)=> (
                               <CommandItem
                                 key={m}
                                 value={m}
                                 onSelect={()=>{ setCfg({...cfg, model:m}); setModelOpen(false) }}
-                                className="text-xs font-mono"
+                                className="font-mono"
                               >
-                                <Check className={`w-3 h-3 mr-2 ${m === cfg.model ? 'opacity-100' : 'opacity-0'}`} />
+                                <Check className={`w-3.5 h-3.5 mr-2 ${m === cfg.model ? 'opacity-100' : 'opacity-0'}`} />
                                 {m}
                               </CommandItem>
                             ))}
@@ -274,57 +336,60 @@ function OptionsApp() {
                       </Command>
                     </PopoverContent>
                   </Popover>
-                  <Button variant="outline" size="icon" onClick={()=>refreshModels()}>
-                    <RefreshCw className="w-3.5 h-3.5" />
+                  <Button variant="outline" size="icon" onClick={()=>refreshModels()} className="bg-white/[0.03] border-white/[0.08]">
+                    <RefreshCw className="w-4 h-4" />
                   </Button>
                 </div>
               </div>
             </div>
 
-            <div className="space-y-1.5">
-              <Label className="text-[10px] uppercase tracking-wide text-muted-foreground">
-                Custom Model (Override)
-              </Label>
+            <div className="space-y-2">
+              <label className="text-xs font-medium text-white/40 uppercase tracking-wider">
+                Custom Model Override
+              </label>
               <Input
                 value={customModel}
                 onChange={e=>setCustomModel(e.target.value)}
                 placeholder="e.g., gpt-4o-2024-08-06"
-                className="font-mono"
+                className="font-mono bg-white/[0.03] border-white/[0.08]"
               />
             </div>
 
-            <Separator />
+            <div className="h-px bg-white/[0.06]" />
 
             {/* Auto-scan toggle */}
-            <div className="flex items-center gap-2">
-              <Switch id="autoscan" checked={cfg.autoScan} onCheckedChange={v=>setCfg({...cfg, autoScan: !!v})} />
-              <Label htmlFor="autoscan" className="text-xs">Auto-scan profiles on navigation</Label>
-              <Badge variant="warning" className="ml-auto">Beta</Badge>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Switch id="autoscan" checked={cfg.autoScan} onCheckedChange={v=>setCfg({...cfg, autoScan: !!v})} />
+                <label htmlFor="autoscan" className="text-sm text-white/70">Auto-scan profiles on navigation</label>
+              </div>
+              <Badge variant="warning">Beta</Badge>
             </div>
 
-            <Separator />
+            <div className="h-px bg-white/[0.06]" />
 
             {/* Impact Profile */}
-            <div className="space-y-1.5">
-              <Label className="text-[10px] uppercase tracking-wide text-muted-foreground">
+            <div className="space-y-2">
+              <label className="text-xs font-medium text-white/40 uppercase tracking-wider">
                 Impact Profile
-              </Label>
+              </label>
               <Textarea
                 rows={4}
                 value={cfg.impactProfile}
                 onChange={e=>setCfg({...cfg, impactProfile: e.target.value})}
                 placeholder="Describe your team's impact profile, culture, and what makes a great candidate..."
+                className="bg-white/[0.03] border-white/[0.08]"
               />
             </div>
 
             {/* System Prompt */}
-            <div className="space-y-1.5">
+            <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label className="text-[10px] uppercase tracking-wide text-muted-foreground">
+                <label className="text-xs font-medium text-white/40 uppercase tracking-wider">
                   Recruiter Agent Prompt
-                </Label>
+                </label>
                 <Button variant="ghost" size="sm" onClick={loadDefaultPrompt}>
-                  <FileText className="w-3.5 h-3.5 mr-1" />
+                  <FileText className="w-4 h-4 mr-1.5" />
                   Load Default
                 </Button>
               </div>
@@ -333,53 +398,53 @@ function OptionsApp() {
                 value={cfg.systemPrompt}
                 onChange={e=>setCfg({...cfg, systemPrompt: e.target.value})}
                 placeholder="System prompt for the AI recruiter agent..."
-                className="font-mono text-[11px]"
+                className="font-mono text-xs bg-white/[0.03] border-white/[0.08]"
               />
-              <p className="text-[10px] text-muted-foreground">
+              <p className="text-xs text-white/30">
                 This prompt guides the AI when evaluating candidates. Stored locally.
               </p>
             </div>
 
             <div className="flex justify-end">
-              <Button onClick={saveCfg}>
-                <Save className="w-3.5 h-3.5 mr-1.5" />
+              <Button onClick={saveCfg} className="gap-2">
+                <Save className="w-4 h-4" />
                 Save AI Settings
               </Button>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </section>
+
+        <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
         {/* Job Descriptions */}
-        <Card>
-          <CardHeader className="pb-3">
-            <div className="flex items-center gap-2">
-              <Briefcase className="w-4 h-4 text-muted-foreground" />
-              <CardTitle>Job Descriptions</CardTitle>
-            </div>
-            <CardDescription>Target roles for candidate matching</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <section className="space-y-6">
+          <div>
+            <h2 className="text-lg font-semibold text-white">Job Descriptions</h2>
+            <p className="text-sm text-white/40 mt-1">Target roles for candidate matching</p>
+          </div>
+
+          <div className="rounded-2xl bg-white/[0.02] border border-white/[0.06] overflow-hidden">
             {/* Jobs Table */}
             {index.length > 0 && (
-              <div className="border border-border rounded-md overflow-hidden">
+              <div className="border-b border-white/[0.06]">
                 <Table>
                   <TableHeader>
-                    <TableRow className="bg-muted/50">
-                      <TableHead className="text-[10px] uppercase tracking-wide h-8">Role</TableHead>
-                      <TableHead className="text-[10px] uppercase tracking-wide h-8 text-right w-24">Actions</TableHead>
+                    <TableRow className="bg-white/[0.02] hover:bg-white/[0.02]">
+                      <TableHead className="text-xs font-medium text-white/40 uppercase tracking-wider h-10">Role</TableHead>
+                      <TableHead className="text-xs font-medium text-white/40 uppercase tracking-wider h-10 text-right w-24">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {index.map((j, i) => (
-                      <TableRow key={j.id} className="group">
-                        <TableCell className="text-xs font-medium py-2">{j.name}</TableCell>
-                        <TableCell className="text-right py-2">
+                      <TableRow key={j.id} className="group border-white/[0.04]">
+                        <TableCell className="text-sm font-medium text-white/80 py-3">{j.name}</TableCell>
+                        <TableCell className="text-right py-3">
                           <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                             <Button variant="ghost" size="icon-sm" onClick={()=>editJob(j.id!)}>
-                              <Pencil className="w-3 h-3" />
+                              <Pencil className="w-3.5 h-3.5" />
                             </Button>
                             <Button variant="ghost" size="icon-sm" onClick={()=>removeJob(j.id!, i)}>
-                              <Trash2 className="w-3 h-3 text-destructive" />
+                              <Trash2 className="w-3.5 h-3.5 text-destructive" />
                             </Button>
                           </div>
                         </TableCell>
@@ -391,40 +456,42 @@ function OptionsApp() {
             )}
 
             {/* Add/Edit Form */}
-            <div className="p-3 border border-border rounded-md bg-muted/30 space-y-3">
-              <div className="flex items-center gap-2">
-                <Plus className="w-3.5 h-3.5 text-muted-foreground" />
-                <span className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
+            <div className="p-6 space-y-4">
+              <div className="flex items-center gap-2 text-white/40">
+                <Plus className="w-4 h-4" />
+                <span className="text-xs font-medium uppercase tracking-wider">
                   {edit.id ? 'Edit Job' : 'Add New Job'}
                 </span>
               </div>
-              <div className="grid grid-cols-3 gap-3">
-                <div className="col-span-2 space-y-1.5">
-                  <Label className="text-[10px] uppercase tracking-wide text-muted-foreground">
+              <div className="grid grid-cols-4 gap-4">
+                <div className="col-span-3 space-y-2">
+                  <label className="text-xs font-medium text-white/40 uppercase tracking-wider">
                     Role Name
-                  </Label>
+                  </label>
                   <Input
                     value={edit.name}
                     onChange={e=>setEdit({...edit, name:e.target.value})}
                     placeholder="e.g., Senior Android Engineer"
+                    className="bg-white/[0.03] border-white/[0.08]"
                   />
                 </div>
                 <div className="flex items-end">
-                  <Button onClick={saveJob} className="w-full">
-                    <Save className="w-3.5 h-3.5 mr-1.5" />
+                  <Button onClick={saveJob} className="w-full gap-2">
+                    <Save className="w-4 h-4" />
                     {edit.id ? 'Update' : 'Add'}
                   </Button>
                 </div>
               </div>
-              <div className="space-y-1.5">
-                <Label className="text-[10px] uppercase tracking-wide text-muted-foreground">
+              <div className="space-y-2">
+                <label className="text-xs font-medium text-white/40 uppercase tracking-wider">
                   Job Description
-                </Label>
+                </label>
                 <Textarea
                   rows={5}
                   value={edit.text}
                   onChange={e=>setEdit({...edit, text:e.target.value})}
                   placeholder="Paste the full job description here..."
+                  className="bg-white/[0.03] border-white/[0.08]"
                 />
               </div>
               {edit.id && (
@@ -433,15 +500,15 @@ function OptionsApp() {
                 </Button>
               )}
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </section>
 
       </main>
 
       <Toaster
         position="bottom-right"
         toastOptions={{
-          className: 'text-xs',
+          className: 'text-sm',
           duration: 2000,
         }}
       />
