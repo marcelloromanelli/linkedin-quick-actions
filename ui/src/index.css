@@ -176,9 +176,17 @@ body {
     @apply border-border;
   }
 
-  /* Focus rings - soft glow */
-  :focus-visible {
+  /* Focus rings - soft glow (buttons only) */
+  button:focus-visible,
+  [role="button"]:focus-visible {
     @apply outline-none ring-2 ring-ring/50 ring-offset-2 ring-offset-background;
+  }
+
+  /* Inputs: no visible focus ring, clean Apple style */
+  input:focus-visible,
+  textarea:focus-visible,
+  [cmdk-input]:focus-visible {
+    @apply outline-none ring-0;
   }
 }
 
