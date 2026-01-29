@@ -4,30 +4,29 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 /**
- * Badge - Status indicator
+ * Badge - Apple Glass 2026
  *
- * Color for meaning only. Semantic variants for status.
- * Tight, compact, technical feel.
+ * Glassy status indicators with subtle glow.
  */
 const badgeVariants = cva(
-  "inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide transition-colors",
+  "inline-flex items-center rounded-full px-3 py-1 text-[11px] font-medium tracking-wide transition-all duration-200",
   {
     variants: {
       variant: {
         default:
-          "bg-primary/15 text-primary border border-primary/20",
+          "bg-primary/20 text-primary backdrop-blur-sm border border-primary/30",
         secondary:
-          "bg-secondary text-secondary-foreground border border-border",
+          "bg-secondary/50 text-secondary-foreground backdrop-blur-sm border border-border",
         success:
-          "bg-success/15 text-success border border-success/20",
+          "bg-success/20 text-success backdrop-blur-sm border border-success/30",
         warning:
-          "bg-warning/15 text-warning border border-warning/20",
+          "bg-warning/20 text-warning-foreground backdrop-blur-sm border border-warning/30",
         destructive:
-          "bg-destructive/15 text-destructive border border-destructive/20",
+          "bg-destructive/20 text-destructive backdrop-blur-sm border border-destructive/30",
         outline:
-          "text-foreground border border-border",
+          "text-foreground backdrop-blur-sm border border-border",
         muted:
-          "bg-muted text-muted-foreground",
+          "bg-muted/50 text-muted-foreground backdrop-blur-sm",
       },
     },
     defaultVariants: {

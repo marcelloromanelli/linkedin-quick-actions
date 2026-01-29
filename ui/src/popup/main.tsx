@@ -3,13 +3,12 @@ import { createRoot } from 'react-dom/client'
 import '../index.css'
 import { useEffect, useState } from 'react'
 import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Button } from '@/components/ui/button'
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
 import { Command, CommandInput, CommandEmpty, CommandList, CommandGroup, CommandItem } from '@/components/ui/command'
-import { Sparkles, ChevronDown, Settings, Zap, Check } from 'lucide-react'
+import { Sparkles, ChevronDown, Settings, Check, Zap, Command as CommandIcon } from 'lucide-react'
 import { getLocal, getSync, setLocal, setSync, JOBS_INDEX, LAST_JOB, SYNC_SETTINGS, SYNC_SELECTORS } from '@/lib/storage'
 import { Toaster } from '@/components/ui/sonner'
 import { toast } from 'sonner'
@@ -72,97 +71,125 @@ function PopupApp() {
   }
 
   return (
-    <div className="w-[380px] bg-background text-foreground">
-      {/* Header */}
-      <header className="flex items-center justify-between px-4 py-3 border-b border-border">
-        <div className="flex items-center gap-2">
-          <div className="flex items-center justify-center w-6 h-6 rounded bg-primary/15">
-            <Zap className="w-3.5 h-3.5 text-primary" />
-          </div>
-          <span className="text-xs font-semibold tracking-tight">Quick Actions</span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <Badge variant={active ? "success" : "secondary"}>
-            {active ? 'Active' : 'Inactive'}
-          </Badge>
-          <Badge variant={hotkeys ? "default" : "muted"}>
-            {hotkeys ? 'Keys On' : 'Keys Off'}
-          </Badge>
-        </div>
-      </header>
+    <div className="w-[400px] min-h-[420px] bg-background relative overflow-hidden">
+      {/* Ambient glow background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/20 rounded-full blur-3xl" />
+        <div className="absolute -bottom-32 -left-32 w-80 h-80 bg-primary/10 rounded-full blur-3xl" />
+      </div>
 
-      {/* Main Content */}
-      <div className="p-4 space-y-4">
-        {/* Hotkeys Toggle */}
-        <div className="flex items-center justify-between">
+      {/* Content */}
+      <div className="relative z-10">
+        {/* Header */}
+        <header className="flex items-center justify-between px-5 py-4">
           <div className="flex items-center gap-3">
-            <Label htmlFor="hotkeys" className="text-xs font-medium">Keyboard shortcuts</Label>
-            <div className="flex items-center gap-1">
-              <kbd>D</kbd>
-              <kbd>A</kbd>
-              <kbd>S</kbd>
-              <kbd>W</kbd>
+            <div className="flex items-center justify-center w-10 h-10 rounded-2xl bg-primary/20 backdrop-blur-sm border border-primary/30 shadow-[0_0_20px_rgba(34,211,238,0.2)]">
+              <Zap className="w-5 h-5 text-primary" />
+            </div>
+            <div>
+              <h1 className="text-sm font-semibold tracking-tight">Quick Actions</h1>
+              <p className="text-[11px] text-muted-foreground">LinkedIn Recruiter</p>
             </div>
           </div>
-          <Switch id="hotkeys" checked={hotkeys} onCheckedChange={toggleHotkeys} />
-        </div>
-
-        <Separator />
-
-        {/* Test Selectors - Compact Grid */}
-        <div className="space-y-2">
-          <div className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-            Test Selectors
+          <div className="flex items-center gap-2">
+            <Badge variant={active ? "default" : "secondary"} className={active ? "shadow-[0_0_12px_rgba(34,211,238,0.3)]" : ""}>
+              {active ? 'Active' : 'Inactive'}
+            </Badge>
           </div>
-          <div className="grid grid-cols-4 gap-1.5">
-            <Button variant="outline" size="sm" onClick={() => test('next')}>
-              Next
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => test('prev')}>
-              Prev
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => test('save')}>
-              Save
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => test('hide')}>
-              Hide
-            </Button>
-          </div>
-        </div>
+        </header>
 
-        <Separator />
+        {/* Main Content */}
+        <div className="px-5 pb-5 space-y-5">
+          {/* Keyboard Shortcuts Card */}
+          <div className="glass rounded-2xl p-4 space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-secondary/50">
+                  <CommandIcon className="w-4 h-4 text-muted-foreground" />
+                </div>
+                <div>
+                  <Label htmlFor="hotkeys" className="text-sm font-medium">Keyboard Shortcuts</Label>
+                  <p className="text-[11px] text-muted-foreground">Navigate candidates quickly</p>
+                </div>
+              </div>
+              <Switch id="hotkeys" checked={hotkeys} onCheckedChange={toggleHotkeys} />
+            </div>
 
-        {/* AI Evaluation */}
-        <div className="space-y-2">
-          <div className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-            AI Candidate Evaluation
+            {/* Keys */}
+            <div className="flex items-center justify-between pt-2">
+              <div className="flex items-center gap-2">
+                <kbd>D</kbd>
+                <span className="text-[11px] text-muted-foreground">Next</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <kbd>A</kbd>
+                <span className="text-[11px] text-muted-foreground">Prev</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <kbd>S</kbd>
+                <span className="text-[11px] text-muted-foreground">Save</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <kbd>W</kbd>
+                <span className="text-[11px] text-muted-foreground">Hide</span>
+              </div>
+            </div>
+
+            {/* Test Buttons */}
+            <div className="grid grid-cols-4 gap-2 pt-2">
+              <Button variant="glass" size="sm" onClick={() => test('next')} className="text-[11px]">
+                Test
+              </Button>
+              <Button variant="glass" size="sm" onClick={() => test('prev')} className="text-[11px]">
+                Test
+              </Button>
+              <Button variant="glass" size="sm" onClick={() => test('save')} className="text-[11px]">
+                Test
+              </Button>
+              <Button variant="glass" size="sm" onClick={() => test('hide')} className="text-[11px]">
+                Test
+              </Button>
+            </div>
           </div>
-          <div className="flex gap-2">
+
+          {/* AI Evaluation Card */}
+          <div className="glass rounded-2xl p-4 space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-primary/20 shadow-[0_0_12px_rgba(34,211,238,0.2)]">
+                <Sparkles className="w-4 h-4 text-primary" />
+              </div>
+              <div>
+                <h3 className="text-sm font-medium">AI Evaluation</h3>
+                <p className="text-[11px] text-muted-foreground">Score candidate fit with AI</p>
+              </div>
+            </div>
+
+            {/* Role Selector */}
             <Popover open={jobOpen} onOpenChange={setJobOpen}>
               <PopoverTrigger asChild>
-                <Button variant="outline" className="flex-1 justify-between font-normal">
-                  <span className="truncate">
+                <Button variant="glass" className="w-full justify-between font-normal h-11">
+                  <span className="truncate text-sm">
                     {jobs[jobIdx]?.name || 'Select role...'}
                   </span>
-                  <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
+                  <ChevronDown className="w-4 h-4 text-muted-foreground" />
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="p-0 w-[var(--radix-popover-trigger-width)]" align="start">
                 <Command>
-                  <CommandInput placeholder="Search roles..." className="h-8 text-xs" />
-                  <CommandEmpty className="py-3 text-xs text-center text-muted-foreground">
+                  <CommandInput placeholder="Search roles..." className="h-10" />
+                  <CommandEmpty className="py-4 text-sm text-center text-muted-foreground">
                     No roles found
                   </CommandEmpty>
-                  <CommandList className="max-h-[180px] scrollbar-thin">
+                  <CommandList className="max-h-[200px] scrollbar-thin">
                     <CommandGroup>
                       {jobs.map((j, i) => (
                         <CommandItem
                           key={j.id}
                           value={j.name}
                           onSelect={() => { setJobIdx(i); setJobOpen(false) }}
-                          className="text-xs"
+                          className="text-sm"
                         >
-                          <Check className={`w-3.5 h-3.5 mr-2 ${i === jobIdx ? 'opacity-100' : 'opacity-0'}`} />
+                          <Check className={`w-4 h-4 mr-2 ${i === jobIdx ? 'opacity-100 text-primary' : 'opacity-0'}`} />
                           {j.name}
                         </CommandItem>
                       ))}
@@ -171,30 +198,37 @@ function PopupApp() {
                 </Command>
               </PopoverContent>
             </Popover>
-            <Button onClick={scoreNow} disabled={!jobs.length} className="gap-1.5">
-              <Sparkles className="w-3.5 h-3.5" />
-              Evaluate
+
+            {/* Evaluate Button */}
+            <Button onClick={scoreNow} disabled={!jobs.length} className="w-full h-11">
+              <Sparkles className="w-4 h-4" />
+              Evaluate Candidate
             </Button>
-          </div>
-          <div className="text-[10px] text-muted-foreground">
-            Shortcut: <kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>F</kbd>
+
+            {/* Shortcut hint */}
+            <div className="flex items-center justify-center gap-1.5 text-[11px] text-muted-foreground">
+              <span>Shortcut:</span>
+              <kbd className="h-5 min-w-5 px-1.5 text-[10px]">⌘</kbd>
+              <kbd className="h-5 min-w-5 px-1.5 text-[10px]">⇧</kbd>
+              <kbd className="h-5 min-w-5 px-1.5 text-[10px]">F</kbd>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Footer */}
-      <footer className="flex items-center justify-between px-4 py-2.5 border-t border-border bg-card/50">
-        <Button variant="ghost" size="sm" onClick={() => chrome.runtime.openOptionsPage?.()}>
-          <Settings className="w-3.5 h-3.5 mr-1.5" />
-          Settings
-        </Button>
-        <span className="text-[10px] font-mono text-muted-foreground">v0.1.0</span>
-      </footer>
+        {/* Footer */}
+        <footer className="flex items-center justify-between px-5 py-3 border-t border-border/50">
+          <Button variant="ghost" size="sm" onClick={() => chrome.runtime.openOptionsPage?.()}>
+            <Settings className="w-4 h-4" />
+            Settings
+          </Button>
+          <span className="text-[11px] font-mono text-muted-foreground/60">v0.1.0</span>
+        </footer>
+      </div>
 
       <Toaster
         position="bottom-center"
         toastOptions={{
-          className: 'text-xs',
+          className: 'glass text-sm',
           duration: 2000,
         }}
       />

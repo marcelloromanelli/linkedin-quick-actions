@@ -5,35 +5,36 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 /**
- * Button variants - Precision design
+ * Button variants - Apple Glass 2026
  *
- * Clean, technical aesthetic. No shadows, subtle borders.
- * 150ms transitions, no bounce.
+ * Glassmorphism with glow effects. Smooth transitions.
  */
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-xs font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-40 [&_svg]:pointer-events-none [&_svg]:size-3.5 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-medium transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-40 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground hover:bg-primary/90",
+          "bg-primary text-primary-foreground shadow-[0_0_20px_rgba(34,211,238,0.3)] hover:shadow-[0_0_30px_rgba(34,211,238,0.4)] hover:scale-[1.02] active:scale-[0.98]",
         destructive:
-          "bg-destructive/15 text-destructive hover:bg-destructive/25 border border-destructive/20",
+          "bg-destructive/20 text-destructive backdrop-blur-sm border border-destructive/30 hover:bg-destructive/30 hover:scale-[1.02] active:scale-[0.98]",
         outline:
-          "border border-border bg-transparent hover:bg-secondary hover:text-secondary-foreground",
+          "border border-border bg-card/50 backdrop-blur-md hover:bg-card hover:border-border/80 hover:scale-[1.02] active:scale-[0.98]",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+          "bg-secondary/80 backdrop-blur-sm text-secondary-foreground hover:bg-secondary hover:scale-[1.02] active:scale-[0.98]",
         ghost:
-          "hover:bg-secondary hover:text-secondary-foreground",
+          "hover:bg-secondary/50 backdrop-blur-sm hover:scale-[1.02] active:scale-[0.98]",
         link:
           "text-primary underline-offset-4 hover:underline",
+        glass:
+          "bg-white/5 backdrop-blur-xl border border-white/10 hover:bg-white/10 hover:border-white/20 hover:scale-[1.02] active:scale-[0.98]",
       },
       size: {
-        default: "h-8 px-3 py-1.5",
-        sm: "h-7 px-2.5 text-[11px]",
-        lg: "h-9 px-4",
-        icon: "h-8 w-8",
-        "icon-sm": "h-7 w-7",
+        default: "h-10 px-5 py-2",
+        sm: "h-8 px-3 text-xs rounded-lg",
+        lg: "h-12 px-6 text-base",
+        icon: "h-10 w-10",
+        "icon-sm": "h-8 w-8 rounded-lg",
       },
     },
     defaultVariants: {

@@ -6,117 +6,123 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * DESIGN SYSTEM: Precision & Density
+ * DESIGN SYSTEM: 2026 Apple Glass
  *
- * A power-user tool for recruiters. Technical, keyboard-first, information-dense.
- * Inspired by Linear, Raycast, and terminal aesthetics.
+ * Premium glassmorphism with depth and sophistication.
+ * Translucent surfaces, subtle gradients, refined typography.
  *
- * Color: Cool slate foundation with cyan accent
- * Depth: Borders-only (flat) — no heavy shadows
- * Typography: Tight, dense, monospace for data
- * Spacing: 4px grid, compact
+ * Inspired by visionOS, iOS 18, and modern Apple interfaces.
  */
 
 :root {
   color-scheme: light dark;
 
-  /* Base radius - sharp corners for technical feel */
-  --radius: 0.375rem;
+  /* Generous radius - Apple's signature soft corners */
+  --radius: 0.75rem;
 
-  /* Light mode - rarely used, but complete */
-  --background: oklch(0.985 0.002 240);
-  --foreground: oklch(0.15 0.015 250);
+  /* Light mode */
+  --background: oklch(0.98 0.005 250);
+  --foreground: oklch(0.15 0.01 250);
 
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.15 0.015 250);
+  --card: oklch(1 0 0 / 70%);
+  --card-foreground: oklch(0.15 0.01 250);
 
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.15 0.015 250);
+  --popover: oklch(1 0 0 / 80%);
+  --popover-foreground: oklch(0.15 0.01 250);
 
-  --primary: oklch(0.65 0.15 195);
+  --primary: oklch(0.6 0.18 180);
   --primary-foreground: oklch(0.98 0 0);
 
-  --secondary: oklch(0.95 0.005 250);
-  --secondary-foreground: oklch(0.25 0.015 250);
+  --secondary: oklch(0.96 0.005 250 / 80%);
+  --secondary-foreground: oklch(0.35 0.01 250);
 
-  --muted: oklch(0.95 0.005 250);
-  --muted-foreground: oklch(0.45 0.01 250);
+  --muted: oklch(0.96 0.005 250 / 60%);
+  --muted-foreground: oklch(0.5 0.01 250);
 
-  --accent: oklch(0.65 0.15 195);
+  --accent: oklch(0.6 0.18 180);
   --accent-foreground: oklch(0.98 0 0);
 
-  --destructive: oklch(0.55 0.2 25);
+  --destructive: oklch(0.6 0.22 25);
   --destructive-foreground: oklch(0.98 0 0);
 
-  --success: oklch(0.65 0.18 155);
+  --success: oklch(0.65 0.2 155);
   --success-foreground: oklch(0.98 0 0);
 
-  --warning: oklch(0.75 0.15 75);
+  --warning: oklch(0.8 0.15 80);
   --warning-foreground: oklch(0.15 0 0);
 
-  --border: oklch(0.88 0.005 250);
-  --input: oklch(0.95 0.005 250);
-  --ring: oklch(0.65 0.15 195);
+  --border: oklch(0 0 0 / 8%);
+  --input: oklch(0 0 0 / 5%);
+  --ring: oklch(0.6 0.18 180);
 
-  /* Chart colors - muted, professional */
-  --chart-1: oklch(0.65 0.15 195);
-  --chart-2: oklch(0.6 0.12 280);
-  --chart-3: oklch(0.7 0.14 155);
-  --chart-4: oklch(0.75 0.12 75);
-  --chart-5: oklch(0.6 0.15 25);
+  /* Glass effect tokens */
+  --glass-bg: oklch(1 0 0 / 60%);
+  --glass-border: oklch(1 0 0 / 50%);
+  --glass-shadow: 0 8px 32px oklch(0 0 0 / 8%), 0 2px 8px oklch(0 0 0 / 4%);
+  --glass-blur: 20px;
+
+  /* Gradient overlays */
+  --gradient-subtle: linear-gradient(135deg, oklch(1 0 0 / 10%) 0%, oklch(1 0 0 / 0%) 100%);
 }
 
 /*
- * DARK MODE - Primary interface
+ * DARK MODE - Deep space with luminous glass
  *
- * Deep slate with subtle blue undertone.
- * Borders define regions, not shadows.
+ * Rich dark foundation with glowing translucent surfaces.
+ * Color comes through the glass, not on it.
  */
 .dark {
-  /* Background hierarchy: bg → card → elevated */
-  --background: oklch(0.12 0.015 250);
-  --foreground: oklch(0.93 0.005 250);
+  /* Deep, rich background with subtle warmth */
+  --background: oklch(0.1 0.02 270);
+  --foreground: oklch(0.95 0.005 250);
 
-  --card: oklch(0.155 0.012 250);
-  --card-foreground: oklch(0.93 0.005 250);
+  /* Glass surfaces */
+  --card: oklch(1 0 0 / 5%);
+  --card-foreground: oklch(0.95 0.005 250);
 
-  --popover: oklch(0.17 0.012 250);
-  --popover-foreground: oklch(0.93 0.005 250);
+  --popover: oklch(1 0 0 / 8%);
+  --popover-foreground: oklch(0.95 0.005 250);
 
-  /* Cyan accent - distinctive, professional */
-  --primary: oklch(0.72 0.14 195);
-  --primary-foreground: oklch(0.12 0.015 250);
+  /* Vibrant cyan-teal accent */
+  --primary: oklch(0.78 0.15 185);
+  --primary-foreground: oklch(0.1 0.02 270);
 
-  --secondary: oklch(0.22 0.01 250);
-  --secondary-foreground: oklch(0.85 0.005 250);
+  --secondary: oklch(1 0 0 / 8%);
+  --secondary-foreground: oklch(0.8 0.005 250);
 
-  --muted: oklch(0.22 0.01 250);
+  --muted: oklch(1 0 0 / 5%);
   --muted-foreground: oklch(0.55 0.01 250);
 
-  --accent: oklch(0.72 0.14 195);
-  --accent-foreground: oklch(0.12 0.015 250);
+  --accent: oklch(0.78 0.15 185);
+  --accent-foreground: oklch(0.1 0.02 270);
 
-  /* Semantic colors - slightly desaturated for dark mode */
-  --destructive: oklch(0.62 0.2 20);
+  /* Semantic - vibrant but balanced */
+  --destructive: oklch(0.7 0.2 20);
   --destructive-foreground: oklch(0.98 0 0);
 
-  --success: oklch(0.68 0.16 155);
-  --success-foreground: oklch(0.12 0 0);
+  --success: oklch(0.75 0.18 155);
+  --success-foreground: oklch(0.1 0 0);
 
-  --warning: oklch(0.78 0.14 75);
-  --warning-foreground: oklch(0.12 0 0);
+  --warning: oklch(0.85 0.15 80);
+  --warning-foreground: oklch(0.1 0 0);
 
-  /* Borders - subtle but present */
-  --border: oklch(1 0 0 / 8%);
-  --input: oklch(1 0 0 / 6%);
-  --ring: oklch(0.72 0.14 195);
+  /* Borders - subtle luminous edges */
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 8%);
+  --ring: oklch(0.78 0.15 185);
 
-  /* Charts */
-  --chart-1: oklch(0.72 0.14 195);
-  --chart-2: oklch(0.65 0.12 280);
-  --chart-3: oklch(0.7 0.14 155);
-  --chart-4: oklch(0.78 0.12 75);
-  --chart-5: oklch(0.65 0.18 20);
+  /* Glass effects for dark mode */
+  --glass-bg: oklch(1 0 0 / 5%);
+  --glass-border: oklch(1 0 0 / 12%);
+  --glass-shadow:
+    0 0 0 1px oklch(1 0 0 / 5%),
+    0 8px 40px oklch(0 0 0 / 40%),
+    0 2px 12px oklch(0 0 0 / 20%);
+  --glass-blur: 24px;
+
+  /* Gradient - subtle glow */
+  --gradient-subtle: linear-gradient(135deg, oklch(1 0 0 / 8%) 0%, oklch(1 0 0 / 0%) 100%);
+  --gradient-glow: radial-gradient(ellipse at top, oklch(0.78 0.15 185 / 15%) 0%, transparent 50%);
 }
 
 /* Full height for extension panels */
@@ -126,15 +132,19 @@ html, body, #root, #liqa-overlay-root {
 
 body {
   @apply bg-background text-foreground antialiased;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Theme tokens → Tailwind */
 @theme inline {
-  --radius-sm: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
   --radius-md: var(--radius);
-  --radius-lg: calc(var(--radius) + 2px);
-  --radius-xl: calc(var(--radius) + 6px);
+  --radius-lg: calc(var(--radius) + 4px);
+  --radius-xl: calc(var(--radius) + 8px);
+  --radius-2xl: calc(var(--radius) + 12px);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -159,11 +169,6 @@ body {
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
 }
 
 @layer base {
@@ -171,36 +176,62 @@ body {
     @apply border-border;
   }
 
-  /* Focus rings - visible, accessible */
+  /* Focus rings - soft glow */
   :focus-visible {
-    @apply outline-none ring-1 ring-ring ring-offset-1 ring-offset-background;
+    @apply outline-none ring-2 ring-ring/50 ring-offset-2 ring-offset-background;
   }
 }
 
-/* Monospace for data - IDs, codes, numbers */
-.font-mono {
-  font-feature-settings: "tnum";
-  letter-spacing: -0.02em;
+/* Glass panel base */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
 }
 
-/* Keyboard shortcuts styling */
+.glass-subtle {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Glow effect for accent elements */
+.glow {
+  box-shadow:
+    0 0 20px oklch(0.78 0.15 185 / 30%),
+    0 0 40px oklch(0.78 0.15 185 / 15%);
+}
+
+.glow-sm {
+  box-shadow: 0 0 12px oklch(0.78 0.15 185 / 25%);
+}
+
+/* Keyboard shortcuts - glass style */
 kbd {
-  @apply inline-flex items-center justify-center h-5 min-w-5 px-1.5
-         text-[10px] font-medium uppercase tracking-wide
-         bg-secondary text-secondary-foreground
-         border border-border rounded;
+  @apply inline-flex items-center justify-center h-6 min-w-6 px-2
+         text-[11px] font-medium
+         rounded-md;
+  background: var(--glass-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-border);
+  color: var(--muted-foreground);
   font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
-/* Score bar colors */
-.score-low { background: oklch(0.62 0.2 20); }
-.score-mid { background: oklch(0.78 0.14 75); }
-.score-high { background: oklch(0.68 0.16 155); }
+/* Score bar colors - vibrant */
+.score-low { background: oklch(0.7 0.2 20); }
+.score-mid { background: oklch(0.85 0.15 80); }
+.score-high { background: oklch(0.75 0.18 155); }
 
-/* Subtle scrollbar for lists */
+/* Refined scrollbar */
 .scrollbar-thin {
   scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
+  scrollbar-color: oklch(1 0 0 / 15%) transparent;
 }
 
 .scrollbar-thin::-webkit-scrollbar {
@@ -212,16 +243,63 @@ kbd {
 }
 
 .scrollbar-thin::-webkit-scrollbar-thumb {
-  background: var(--border);
+  background: oklch(1 0 0 / 15%);
   border-radius: 3px;
 }
 
-/* Animation: quick, no bounce */
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: oklch(1 0 0 / 25%);
+}
+
+/* Animations - smooth, Apple-like */
 @keyframes fade-in {
-  from { opacity: 0; transform: translateY(-4px); }
+  from { opacity: 0; transform: scale(0.98) translateY(-4px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
 .animate-fade-in {
-  animation: fade-in 150ms cubic-bezier(0.25, 1, 0.5, 1);
+  animation: fade-in 250ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animate-slide-up {
+  animation: slide-up 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* Gradient text for accents */
+.gradient-text {
+  background: linear-gradient(135deg, oklch(0.78 0.15 185) 0%, oklch(0.7 0.18 200) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Noise texture overlay for depth */
+.noise::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Section divider - soft gradient line */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--border) 20%, var(--border) 80%, transparent 100%);
 }
