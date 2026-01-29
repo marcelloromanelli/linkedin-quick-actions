@@ -27,30 +27,31 @@ function generateIcon(size) {
   ctx.roundRect(0, 0, size, size, radius);
   ctx.fill();
 
-  // Lightning bolt
+  // Lightning bolt - bold design for small sizes
   ctx.fillStyle = ICON_COLOR;
 
   const cx = size / 2;
   const cy = size / 2;
-  const scale = size / 128; // Base design at 128px
+  const s = size / 128; // Scale factor
 
-  // Lightning bolt path (stylized)
+  // Bold angular lightning bolt
   ctx.beginPath();
 
-  // Points for lightning bolt shape - classic design
-  const points = [
-    [cx + 12 * scale, cy - 42 * scale],   // Top right start
-    [cx - 18 * scale, cy + 6 * scale],    // Middle left
-    [cx + 4 * scale, cy + 6 * scale],     // Middle center right
-    [cx - 12 * scale, cy + 42 * scale],   // Bottom left end
-    [cx + 18 * scale, cy - 6 * scale],    // Middle right
-    [cx - 4 * scale, cy - 6 * scale],     // Middle center left
-  ];
+  // Top triangle going right
+  ctx.moveTo(cx - 20 * s, cy - 48 * s);  // Top left
+  ctx.lineTo(cx + 32 * s, cy - 48 * s);  // Top right
+  ctx.lineTo(cx + 4 * s, cy + 4 * s);    // Middle point right
 
-  ctx.moveTo(points[0][0], points[0][1]);
-  for (let i = 1; i < points.length; i++) {
-    ctx.lineTo(points[i][0], points[i][1]);
-  }
+  // Jag back to the left
+  ctx.lineTo(cx + 20 * s, cy + 4 * s);   // Notch right
+
+  // Bottom triangle going left
+  ctx.lineTo(cx - 32 * s, cy + 48 * s);  // Bottom left
+  ctx.lineTo(cx - 4 * s, cy - 4 * s);    // Middle point left
+
+  // Jag back to complete
+  ctx.lineTo(cx - 20 * s, cy - 4 * s);   // Notch left
+
   ctx.closePath();
   ctx.fill();
 
